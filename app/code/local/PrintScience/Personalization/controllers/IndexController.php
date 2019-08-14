@@ -89,7 +89,11 @@ class PrintScience_Personalization_IndexController extends Mage_Core_Controller_
             if ((!$product) || (!$product->getPersonalizationEnabled())) {
                 $isValidProduct = false;
             }
-        } else {
+        }  elseif ($productTypeId == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
+			if (!$product->getPersonalizationEnabled()) {
+                $isValidProduct = false;
+            }
+		} else {
             $isValidProduct = false;
         }
         

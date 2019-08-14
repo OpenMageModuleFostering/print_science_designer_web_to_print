@@ -8,26 +8,26 @@ $window_type = Mage::getStoreConfig('catalog/personalization/window_type');
     <td>
         <?php $apiSessionKey = $this->getPersonalizationApiSessionKey() ?>
         <?php if ($apiSessionKey):?>
-        <?php $personalizationPreviews = $this->getPersonalizationPreviews() ?>
-		<?php //echo "<pre>"; print_r($personalizationPreviews); echo "</pre>";?>
-        <div class="personalizationGallery" style="height:50px">
-            <?php $class = '' ?>
-            <?php foreach ($personalizationPreviews as $previewImage):
-					if (!$class) { $class = 'class="first"'; }
-			?>
-					<a href="<?php echo $previewImage ?>" rel="fancybox[<?php echo $apiSessionKey ?>]" class="pgImg" target="_blank"><img src="<?php echo $previewImage ?>" hight="100" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" <?php echo $class ?> /></a>
-            <?php endforeach; ?>			
-        </div>
-		
-        <div>
-			<?php if ($apiSessionKey):?>
-				<?php if ($window_type=='2'):?>
-            		<button type="button" title="<?php echo $this->__('Re-edit') ?>" class="button btn-cart personalize_btn_link" onclick="setPersonalizeLocation('<?php echo $this->getResumePersonalizationUrl($_item->getProduct()->getId()) ?>', this.form)"><span><span><?php echo $this->__('Re-edit') ?></span></span></button>
-				<?php else: ?>
-					<button type="button" title="<?php echo $this->__('Re-edit') ?>" class="button btn-cart personalize_btn_link" onclick="setLocation('<?php echo $this->getResumePersonalizationUrl($_item->getProduct()->getId()) ?>')"><span><span><?php echo $this->__('Re-edit') ?></span></span></button>
-				<?php endif; ?>
-			<?php endif; ?>
-        </div>
+			<?php $personalizationPreviews = $this->getPersonalizationPreviews() ?>
+            <?php //echo "<pre>"; print_r($personalizationPreviews); echo "</pre>";?>
+            <div class="personalizationGallery" style="height:50px">
+                <?php $class = '' ?>
+                <?php foreach ($personalizationPreviews as $previewImage):
+                        if (!$class) { $class = 'class="first"'; }
+                ?>
+                        <a href="<?php echo $previewImage ?>" rel="fancybox[<?php echo $apiSessionKey ?>]" class="pgImg" target="_blank"><img src="<?php echo $previewImage ?>" hight="100" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" <?php echo $class ?> /></a>
+                <?php endforeach; ?>			
+            </div>
+            
+            <div>
+                <?php if ($apiSessionKey):?>
+                    <?php if ($window_type=='2'):?>
+                        <button type="button" title="<?php echo $this->__('Re-edit') ?>" class="button btn-cart personalize_btn_link" onclick="setPersonalizeLocation('<?php echo $this->getResumePersonalizationUrl($_item->getProduct()->getId()) ?>', this.form)"><span><span><?php echo $this->__('Re-edit') ?></span></span></button>
+                    <?php else: ?>
+                        <button type="button" title="<?php echo $this->__('Re-edit') ?>" class="button btn-cart personalize_btn_link" onclick="setLocation('<?php echo $this->getResumePersonalizationUrl($_item->getProduct()->getId()) ?>')"><span><span><?php echo $this->__('Re-edit') ?></span></span></button>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </div>
         <?php else: ?>
 			<?php $personalizationPreviews = $this->getPersonalizationPreviews() ?>
 			<?php if(!empty($personalizationPreviews)):?>
@@ -55,24 +55,36 @@ $window_type = Mage::getStoreConfig('catalog/personalization/window_type');
             <?php echo $this->htmlEscape($this->getProductName()) ?>
         <?php endif; ?>
         </h2>
-        <?php if ($_options = $this->getOptionList()):?>
-        <dl class="item-options">
-            <?php foreach ($_options as $_option) : ?>
-            <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
-            <dt><?php echo $this->htmlEscape($_option['label']) ?></dt>
-            <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated"<?php endif; ?>><?php echo $_formatedOptionValue['value'] ?>
-                <?php if (isset($_formatedOptionValue['full_view'])): ?>
-                <div class="truncated_full_value">
-                    <dl class="item-options">
-                        <dt><?php echo $this->htmlEscape($_option['label']) ?></dt>
-                        <dd><?php echo $_formatedOptionValue['full_view'] ?></dd>
-                    </dl>
-                </div>
-                <?php endif; ?>
-            </dd>
-            <?php endforeach; ?>
-        </dl>
-        <?php endif;?>
+        <?php /*if($_item->getProductType() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE):?>
+        <?php $productOptions = $_item->getProduct()->getTypeInstance(true)->getOrderOptions($_item->getProduct());
+			if(is_array($productOptions['info_buyRequest']['bundle_option'])): ?>
+                <dl class="item-options">
+                    <?php foreach($productOptions['bundle_options'] as $itemoption) : ?>
+                    	<dt><?php echo $this->escapeHtml($itemoption['label']) ?></dt>
+                        <dd><?php echo $this->escapeHtml($itemoption['value'][0]['qty']) ?> x <?php echo $this->escapeHtml($itemoption['value'][0]['title']) ?> <span class="price"><?php echo Mage::helper('core')->currency($itemoption['value'][0]['price'], true, false); ?></span></dd>
+                    <?php endforeach; ?>
+                </dl>
+			<?php endif; ?>
+        <?php else:*/?>
+			<?php if ($_options = $this->getOptionList()):?>
+            <dl class="item-options">
+                <?php foreach ($_options as $_option) : ?>
+                <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
+                <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated"<?php endif; ?>><?php echo $_formatedOptionValue['value'] ?>
+                    <?php if (isset($_formatedOptionValue['full_view'])): ?>
+                    <div class="truncated_full_value">
+                        <dl class="item-options">
+                            <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                            <dd><?php echo $_formatedOptionValue['full_view'] ?></dd>
+                        </dl>
+                    </div>
+                    <?php endif; ?>
+                </dd>
+                <?php endforeach; ?>
+            </dl>
+            <?php endif;?>
+        <?php //endif; ?>
         <?php if ($messages = $this->getMessages()): ?>
         <?php foreach ($messages as $message): ?>
             <p class="item-msg <?php echo $message['type'] ?>">* <?php echo $message['text'] ?></p>

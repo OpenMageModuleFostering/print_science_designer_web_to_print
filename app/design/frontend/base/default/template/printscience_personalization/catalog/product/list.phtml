@@ -64,14 +64,14 @@
                     <?php echo $this->getReviewsSummaryHtml($_product) ?>
                     <?php endif; ?>
                     <?php echo $this->getPriceHtml($_product, true) ?>
-                    <?php if ($_personalizationHelper->isPersonalizationEnabled($_product)): ?>
+                    <?php if ($_personalizationHelper->isPersonalizationEnabled($_product) && $_product->getTypeID() != Mage_Catalog_Model_Product_Type::TYPE_BUNDLE): ?>
                         <?php $buttonTitle = $this->__('Personalize'); ?>
                     <?php else: ?>
                         <?php $buttonTitle = $this->__('Add to Cart'); ?>
                     <?php endif; ?>
                     <?php if($_product->isSaleable()): ?>
 					
-						<?php if ($_personalizationHelper->isPersonalizationEnabled($_product)): ?>
+						<?php if ($_personalizationHelper->isPersonalizationEnabled($_product) && $_product->getTypeID() != Mage_Catalog_Model_Product_Type::TYPE_BUNDLE): ?>
 							<?php if ($window_type=='2'):?>
 								<?php if(strpos($this->getAddToCartUrl($_product), "uenc")!==false): ?>
 									<p><button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="setPersonalizeLocation('<?php echo $this->getAddToCartUrl($_product) ?>', jQuery(this.form))"><span><span><?php echo $buttonTitle ?></span></span></button></p>
@@ -125,13 +125,13 @@
                 <?php endif; ?>
                 <?php echo $this->getPriceHtml($_product, true) ?>
                 <div class="actions">
-                    <?php if ($_personalizationHelper->isPersonalizationEnabled($_product)): ?>
+                    <?php if ($_personalizationHelper->isPersonalizationEnabled($_product) && $_product->getTypeID() != Mage_Catalog_Model_Product_Type::TYPE_BUNDLE): ?>
                         <?php $buttonTitle = $this->__('Personalize'); ?>
                     <?php else: ?>
                         <?php $buttonTitle = $this->__('Add to Cart'); ?>
                     <?php endif; ?>
                     <?php if($_product->isSaleable()): ?>
-						<?php if ($_personalizationHelper->isPersonalizationEnabled($_product)): ?>
+						<?php if ($_personalizationHelper->isPersonalizationEnabled($_product) && $_product->getTypeID() != Mage_Catalog_Model_Product_Type::TYPE_BUNDLE): ?>
 							<?php if ($window_type=='2'):?>
 								<?php if(strpos($this->getAddToCartUrl($_product), "uenc")!==false): ?>
                         			<button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="setPersonalizeLocation('<?php echo $this->getAddToCartUrl($_product) ?>', jQuery(this.form))"><span><span><?php echo $buttonTitle ?></span></span></button>

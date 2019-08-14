@@ -54,7 +54,11 @@ class PrintScience_Personalization_Helper_Output extends Mage_Core_Helper_Abstra
 
             return true;
 
-        }
+        } elseif ($productTypeId == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
+			
+			return $product->getPersonalizationEnabled();
+			
+		}
 
     }
 
