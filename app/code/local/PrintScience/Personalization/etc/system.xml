@@ -27,24 +27,89 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>                             
                         </api_password>
-                        <api_url transalte="label">
-                            <label>API URL</label>
-                            <frontend_type>text</frontend_type>
-                            <backend_model>printscience_personalization/system_config_backend_apiUrl</backend_model>
+                        <api_version translate="label">
+                            <label>API Version</label>
+                            <frontend_type>select</frontend_type>
                             <sort_order>3</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>                             
-                        </api_url>
-                        <api_image_url transalte="label">
-                            <label>API Image URL</label>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <source_model>printscience_personalization/system_config_source_apiVersion</source_model>
+                        </api_version>
+                        <api_url transalte="label">
+                            <label>API URL</label>
                             <frontend_type>text</frontend_type>
                             <backend_model>printscience_personalization/system_config_backend_apiUrl</backend_model>
                             <sort_order>4</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>                             
+                        </api_url>
+						<window_type transalte="label">
+                            <label>Window style for desktop users</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <source_model>printscience_personalization/system_config_source_windowType</source_model>
+                        </window_type>
+						<window_type_mobile transalte="label">
+                            <label>Window style for mobile users</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <source_model>printscience_personalization/system_config_source_windowType</source_model>
+                        </window_type_mobile>
+						<background_color transalte="label">
+                            <label>Background color of Margin surround the modal window</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>7</sort_order>
+							<validate>color</validate>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                        </api_image_url>
+							<comment>Specify the background color.</comment>                             
+                        </background_color>
+						<margin_width transalte="label">
+                            <label>Width of Margin surround the modal window(desktop)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+							<comment>(px)</comment>                             
+                        </margin_width>
+						<window_opacity transalte="label">
+                            <label>Modal window opacity</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+							<comment>(%)</comment>                             
+                        </window_opacity>
+                        <jquery_enabled transalte="label">
+                            <label>Designer extension loads jquery</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>9</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+							<comment>Set to "No" if your theme loads jquery.</comment>                             
+                        </jquery_enabled>
+						<test translate="label comment">
+						  <comment>Save settings before running this test.</comment>
+						  <frontend_type>select</frontend_type>
+						  <frontend_model>printscience_personalization/adminhtml_test</frontend_model>
+						  <sort_order>10</sort_order>
+						  <show_in_default>1</show_in_default>
+						  <show_in_website>0</show_in_website>
+						  <show_in_store>0</show_in_store>
+						</test>
                     </fields>             
                 </personalization>
             </groups>

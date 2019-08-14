@@ -15,6 +15,8 @@ class PrintScience_Personalization_IndexController extends Mage_Core_Controller_
         $session       = Mage::getSingleton('core/session');
         $sessionHelper = Mage::helper('printscience_personalization/session');
         $quoteHelper   = Mage::helper('printscience_personalization/quote');
+		$datasHelper   = Mage::helper('printscience_personalization/data');
+		$homeUrl = Mage::getUrl('home');
         $request       = $this->getRequest();
         
         $apiSessionKey = $request->getParam('api_session_key');
@@ -27,7 +29,8 @@ class PrintScience_Personalization_IndexController extends Mage_Core_Controller_
         }
         if (!$isValidRequest) {
             $session->addError($this->__('Invalid request.'));
-            $this->_redirect('home');
+            //$this->_redirect('home');
+			$datasHelper->_redirectToUrl($homeUrl);
             return false;
         }
         
@@ -37,7 +40,8 @@ class PrintScience_Personalization_IndexController extends Mage_Core_Controller_
             'apiSessionKey' => $cartItemData['apiSessionKey'],
         ));
 
-        $this->_redirectUrl($cartItemData['appUrl']);
+        //$this->_redirectUrl($cartItemData['appUrl']);
+		$datasHelper->_redirectToUrl($cartItemData['appUrl']);
     }
     
     /**
@@ -50,8 +54,9 @@ class PrintScience_Personalization_IndexController extends Mage_Core_Controller_
         $session       = Mage::getSingleton('core/session');
         $sessionHelper = Mage::helper('printscience_personalization/session');
         $quoteHelper   = Mage::helper('printscience_personalization/quote');
+		$datasHelper   = Mage::helper('printscience_personalization/data');
         $request       = $this->getRequest();
-        $errorUrl      = 'checkout/cart';
+        $errorUrl      = Mage::getUrl('checkout/cart');
         
         $apiSessionKey = $request->getParam('api_session_key');
         $productId = intval($request->getParam('product'));
@@ -60,7 +65,8 @@ class PrintScience_Personalization_IndexController extends Mage_Core_Controller_
             ->load($productId);
         if (!$product->getId()) {
             $session->addError($this->__('Invalid request.'));
-            $this->_redirect($errorUrl);
+            //$this->_redirect($errorUrl);
+			$datasHelper->_redirectToUrl($errorUrl);
             return false;
         }
 
@@ -83,20 +89,27 @@ class PrintScience_Personalization_IndexController extends Mage_Core_Controller_
             if ((!$product) || (!$product->getPersonalizationEnabled())) {
                 $isValidProduct = false;
             }
-        } else {
+        }  elseif ($productTypeId == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
+			if (!$product->getPersonalizationEnabled()) {
+                $isValidProduct = false;
+            }
+		} else {
             $isValidProduct = false;
         }
         
         if (!$isValidProduct) {
             $session->addError($this->__('Invalid Product.'));
-            $this->_redirect($errorUrl);
+            //$this->_redirect($errorUrl);
+			$datasHelper->_redirectToUrl($errorUrl);
             return false;
         }
         // check if template ID is valid
         $templateId = $product->getPersonalizationTemplateId();
-        if (!$templateId) {
-            $session->addError($controller->__('Unable to start personalization: template ID is empty.'));    
-            $this->_redirect($errorUrl);
+		$productId = $product->getPersonalizationProductId();
+        if (!$productId) {
+            $session->addError($controller->__('Unable to start personalization: product ID is empty.'));    
+            //$this->_redirect($errorUrl);
+		    $datasHelper->_redirectToUrl($errorUrl);
             return false;          
         }
         
@@ -109,7 +122,8 @@ class PrintScience_Personalization_IndexController extends Mage_Core_Controller_
         }
         if (!$isValidRequest) {
             $session->addError($this->__('Invalid request.'));
-            $this->_redirect($errorUrl);
+            //$this->_redirect($errorUrl);
+			$datasHelper->_redirectToUrl($errorUrl);
             return false;
         }
         
@@ -127,6 +141,7 @@ class PrintScience_Personalization_IndexController extends Mage_Core_Controller_
         }
         $returnUrlParams['_query'] = $buyRequestParams;
         $returnUrlParams['personalization_session_key'] = $apiSessionKey;
+		$returnUrlParams['_secure'] = true;
         
         $successUrl = Mage::getUrl('personalization/index/success', $returnUrlParams);
         $failUrl    = Mage::getUrl('personalization/index/fail', $returnUrlParams);
@@ -134,27 +149,34 @@ class PrintScience_Personalization_IndexController extends Mage_Core_Controller_
         
         // begin personalization
         $apiGateway  = Mage::getModel('printscience_personalization/apiGateway');
-        $apiResponse = $apiGateway->resumePersonalization($apiSessionKey, $templateId, $successUrl, $failUrl, $cancelUrl);
+        $apiResponse = $apiGateway->resumePersonalization($apiSessionKey, $productId, $templateId, $successUrl, $failUrl, $cancelUrl);
         if (!$apiResponse) {
             $session->addError($this->__('Unable to start personalization: API response was empty.'));    
-            $this->_redirect($errorUrl);
+            //$this->_redirect($errorUrl);
+			$datasHelper->_redirectToUrl($errorUrl);
             return false;
         }
         if ($apiResponse->getFaultCode()) {
             $session->addError($this->__('Unable to start personalization: ' . $apiResponse->getFaultString()));
-            $this->_redirect($errorUrl);
+            //$this->_redirect($errorUrl);
+			$datasHelper->_redirectToUrl($errorUrl);
             return false;
         }
         $apiSessionKey = $apiResponse->getSessionKey();
+		
+		$userVersion = $apiGateway->getPersonalizationVersion();
+		
         $appUrl = $apiResponse->getAppUrl();
         
         $sessionHelper->addData($apiSessionKey, array(
             'apiSessionKey' => $apiSessionKey,
             'appUrl' => $appUrl,
-            'buyRequest' => serialize($buyRequestParams)
+            'buyRequest' => serialize($buyRequestParams),
+			'userVersion' => $userVersion,
         ));
         
         $this->_redirectUrl($appUrl);
+		//$datasHelper->_redirectToUrl($appUrl);
         return false;
     }
 
@@ -167,17 +189,21 @@ class PrintScience_Personalization_IndexController extends Mage_Core_Controller_
     {
         $session = Mage::getSingleton('core/session');
         $request = $this->getRequest();
-         
+        $datasHelper = Mage::helper('printscience_personalization/data');
+		$homeUrl = Mage::getUrl('home');
+		
         if (!$this->_isValidRequest()) {
             $session->addError($this->__('Invalid request.'));  
-            $this->_redirect('home'); 
+            //$this->_redirect('home'); 
+			$datasHelper->_redirectToUrl($homeUrl);
             return false;             
         }
         
         $product = $this->_initProduct();
         if (!$product) {
-            $session->addError($this->__('Personalization error: product not found.'));  
-            $this->_redirect('home'); 
+            $session->addError($this->__('Personalization error: product not found.'));
+            //$this->_redirect('home'); 
+			$datasHelper->_redirectToUrl($homeUrl);
             return false; 
         }
          
@@ -201,16 +227,17 @@ class PrintScience_Personalization_IndexController extends Mage_Core_Controller_
         $apiResponse = $apiGateway->getPreview($apiSessionKey);
         if ($apiResponse->getFaultCode()) {
             $session->addError($this->__('Personalization was not completed.'));
-            $this->_redirectUrl($errorUrl);      
+            //$this->_redirectUrl($errorUrl);      
+			$datasHelper->_redirectToUrl($errorUrl);
             return false;      
         }
-        
-        if (!$cartItem) {
+		if (!$cartItem) {
             Mage::register('PrintScience_Personalization_calledFromSuccessAction', true);
             $this->_forward('add', 'cart', 'checkout');
         } else {
-            $this->_redirect('checkout/cart');
-        }
+			$checkOutUrl = Mage::getUrl('checkout/cart');
+			$datasHelper->_redirectToUrl($checkOutUrl);
+		}
     }
     
     /**
@@ -221,18 +248,22 @@ class PrintScience_Personalization_IndexController extends Mage_Core_Controller_
     public function cancelAction()
     {
         $session = Mage::getSingleton('core/session');
-        $request = $this->getRequest();        
-        
+        $request = $this->getRequest();
+		$datasHelper = Mage::helper('printscience_personalization/data');
+        $homeUrl = Mage::getUrl('home');
+		
         if (!$this->_isValidRequest()) {
             $session->addError($this->__('Invalid request.'));  
-            $this->_redirect('home'); 
+            //$this->_redirect('home'); 
+			$datasHelper->_redirectToUrl($homeUrl);
             return false;             
         } 
                
         $product = $this->_initProduct();
         if (!$product) {
             $session->addError($this->__('Personalization error: product not found.'));  
-            $this->_redirect('home'); 
+            //$this->_redirect('home'); 
+			$datasHelper->_redirectToUrl($homeUrl);
             return false; 
         }      
         
@@ -255,7 +286,8 @@ class PrintScience_Personalization_IndexController extends Mage_Core_Controller_
             $redirectUrl = Mage::getUrl('checkout/cart');
         }
         
-        $this->_redirectUrl($redirectUrl);
+        //$this->_redirectUrl($redirectUrl);
+		$datasHelper->_redirectToUrl($redirectUrl);
     }
     
     /**
@@ -316,5 +348,28 @@ class PrintScience_Personalization_IndexController extends Mage_Core_Controller_
             }
         }
         return false;
+    }
+	
+	/**
+     * Personalization fail action handler
+     *
+     */
+    public function setversionAction()
+    {
+		$version = $this->getRequest()->getParam('version');
+		$sessionHelper = Mage::helper('printscience_personalization/session');
+        $sessionHelper->addData('dummy_user_version', $version);
+    }
+	
+	public function getversionAction()
+    {
+        $sessionHelper = Mage::helper('printscience_personalization/session');
+		//$sessionHelper->unsetData('dummy_user_version');
+		$dummyuserVersion = $sessionHelper->getData('dummy_user_version');
+		if($dummyuserVersion) {
+			echo $dummyuserVersion;
+		} else {
+			return false;
+		}
     }
 }

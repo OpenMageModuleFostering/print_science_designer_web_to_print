@@ -20,7 +20,17 @@ class PrintScience_Personalization_Model_Observer
     public function checkForCheckoutCartAddAction($observer) 
     {
         $this->_observer = $observer;
-        
+		
+		/*CALL TO CHECK USER DEVICE*/
+		//$sessionHelper = Mage::helper('printscience_personalization/session');
+		//$sessionHelper->unsetData('dummy_user_version');
+		//$dummyuserVersion = $sessionHelper->getData('dummy_user_version');
+		//if(!$dummyuserVersion) {
+			//$dummyapiGateway  = Mage::getModel('printscience_personalization/apiGateway');
+			//$userVersion = $dummyapiGateway->getPersonalizationVersion();
+			//$sessionHelper->addData('dummy_user_version', $userVersion);
+		//}
+		/*CALL TO CHECK USER DEVICE*/
         $controller = $observer->getControllerAction();
         $sessionHelper = Mage::helper('printscience_personalization/session');
         $request    = Mage::app()->getRequest();
@@ -46,6 +56,7 @@ class PrintScience_Personalization_Model_Observer
         $request    = Mage::app()->getRequest();
         $response   = Mage::app()->getResponse();
         $session    = Mage::getSingleton('core/session');
+		$datasHelper = Mage::helper('printscience_personalization/data');
         
         $productId = intval($request->getParam('product'));
         $product   = Mage::getModel('catalog/product')
@@ -75,15 +86,21 @@ class PrintScience_Personalization_Model_Observer
             if ((!$product) || (!$product->getPersonalizationEnabled())) {
                 return false;
             }
+        } elseif ($productTypeId == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
+            if (!$product->getPersonalizationEnabled()) {
+                return false;
+            }
         } else {
             return false;
         }
         
         // check if template ID is valid
         $templateId = $product->getPersonalizationTemplateId();
-        if (!$templateId) {
-            $session->addError($controller->__('Unable to start personalization: template ID is empty.'));    
+		$productId = $product->getPersonalizationProductId();
+        if (!$productId) {
+            $session->addError($controller->__('Unable to start personalization: product ID is empty.'));    
             $response->setRedirect($errorUrl)->sendHeaders();
+			//$datasHelper->_redirectToUrl($errorUrl);
     		exit();	      
         }
         
@@ -95,37 +112,47 @@ class PrintScience_Personalization_Model_Observer
             unset($buyRequestParams['uenc']);
         }
         $returnUrlParams['_query'] = $buyRequestParams;
+				
         if (isset($returnUrlParams['uenc'])) {
             unset($returnUrlParams['uenc']);
         }
         $returnUrlParams['personalization_session_key'] = $sessionKey;
-        
-        $successUrl = Mage::getUrl('personalization/index/success', $returnUrlParams);
+		$returnUrlParams['_secure'] = true;
+		
+		$successUrl = Mage::getUrl('personalization/index/success', $returnUrlParams);
         $failUrl    = Mage::getUrl('personalization/index/fail', $returnUrlParams);
         $cancelUrl  = Mage::getUrl('personalization/index/cancel', $returnUrlParams);
+
         // begin personalization
         $apiGateway  = Mage::getModel('printscience_personalization/apiGateway');
-        $apiResponse = $apiGateway->beginPersonalization($templateId, $successUrl, $failUrl, $cancelUrl);
+        $apiResponse = $apiGateway->beginPersonalization($productId, $templateId, $successUrl, $failUrl, $cancelUrl);
         if (!$apiResponse) {
             $session->addError($controller->__('Unable to start personalization: API response was empty.'));    
             $response->setRedirect($errorUrl)->sendHeaders();
+			//$datasHelper->_redirectToUrl($errorUrl);
             exit();
         }
         if ($apiResponse->getFaultCode()) {
             $session->addError($controller->__('Unable to start personalization: ' . $apiResponse->getFaultString()));
             $response->setRedirect($errorUrl)->sendHeaders();
+			//$datasHelper->_redirectToUrl($errorUrl);
             exit();
         }       
         $apiSessionKey = $apiResponse->getSessionKey();
+		
+		$userVersion = $apiGateway->getPersonalizationVersion($apiSessionKey);
         $appUrl = $apiResponse->getAppUrl();
 
         $sessionHelper->addData($sessionKey, array(
             'apiSessionKey' => $apiSessionKey,
             'appUrl' => $appUrl,
-            'buyRequest' => serialize($buyRequestParams)
+            'buyRequest' => serialize($buyRequestParams),
+			'userVersion' => $userVersion,
         ));
-
+		
         $response->setRedirect($appUrl)->sendHeaders();
+		
+		//$datasHelper->_redirectToUrl($appUrl);
         exit();
     }
     
@@ -163,7 +190,8 @@ class PrintScience_Personalization_Model_Observer
         
         $quoteItem = $observer->getEvent()->getData('quote_item');
         $productItem = Mage::getModel('catalog/product')->load($quoteItem->getProduct()->getId());
-        if ((!$productItem->getPersonalizationEnabled()) || (!$sessionKey)) {
+		if (!$sessionKey) {
+        //if ((!$productItem->getPersonalizationEnabled()) || (!$sessionKey)) {
             return false;
         }
         
@@ -267,13 +295,33 @@ class PrintScience_Personalization_Model_Observer
             }
         }
         //if ($containsPersonalizedItems) {
+        $storeId = Mage::app()->getStore()->getStoreId();
+          if(Mage::getStoreConfig('catalog/personalization/jquery_enabled',$storeId))
+          {
             $layout->getBlock('head')
-                ->addJs('printscience_personalization/jquery/jquery-1.4.2.min.js')
+             ->addJs('printscience_personalization/jquery/jquery-1.10.1.min.js')
+                ->addJs('printscience_personalization/jquery/jquery.cycle/jquery.cycle.lite.js')
+                ->addJs('printscience_personalization/jquery/fancybox/jquery.fancybox.pack.js')
+                ->addItem('js_css', 'printscience_personalization/jquery/fancybox/jquery.fancybox.css')
+                //->addJs('printscience_personalization/gallery.js')
+                ->addItem('js_css', 'printscience_personalization/gallery.css');
+         }
+         else
+         {
+         	 $layout->getBlock('head')
+                ->addJs('printscience_personalization/jquery/jquery.cycle/jquery.cycle.lite.js')
+                ->addJs('printscience_personalization/jquery/fancybox/jquery.fancybox.pack.js')
+                ->addItem('js_css', 'printscience_personalization/jquery/fancybox/jquery.fancybox.css')
+                //->addJs('printscience_personalization/gallery.js')
+                ->addItem('js_css', 'printscience_personalization/gallery.css');
+              
+         }
+                /*->addJs('printscience_personalization/jquery/jquery-1.4.2.min.js')
                 ->addJs('printscience_personalization/jquery/jquery.cycle/jquery.cycle.lite.min.js')
                 ->addJs('printscience_personalization/jquery/fancybox/jquery.fancybox-1.3.4.pack.js')
                 ->addItem('js_css', 'printscience_personalization/jquery/fancybox/jquery.fancybox-1.3.4.css')
                 ->addJs('printscience_personalization/gallery.js')
-                ->addItem('js_css', 'printscience_personalization/gallery.css');
+                ->addItem('js_css', 'printscience_personalization/gallery.css');*/
         //}
     }
     
@@ -302,4 +350,13 @@ class PrintScience_Personalization_Model_Observer
             }
         }        
     }
+	public function addToCartComplete(Varien_Event_Observer $observer) {
+		// Send the user to the Item added page
+		$response = $observer->getResponse();
+		$request = $observer->getRequest();
+		$datasHelper = Mage::helper('printscience_personalization/data');
+		$checkOutUrl = Mage::getUrl('checkout/cart');
+		$datasHelper->_redirectToUrl($checkOutUrl, "1");
+		exit;
+	}
 }
