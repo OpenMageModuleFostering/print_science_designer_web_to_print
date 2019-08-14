@@ -10,12 +10,12 @@ $window_type = Mage::getStoreConfig('catalog/personalization/window_type');
         <?php if ($apiSessionKey):?>
 			<?php $personalizationPreviews = $this->getPersonalizationPreviews() ?>
             <?php //echo "<pre>"; print_r($personalizationPreviews); echo "</pre>";?>
-            <div class="personalizationGallery" style="height:50px">
+            <div class="personalizationGallery">
                 <?php $class = '' ?>
                 <?php foreach ($personalizationPreviews as $previewImage):
                         if (!$class) { $class = 'class="first"'; }
                 ?>
-                        <a href="<?php echo $previewImage ?>" rel="fancybox[<?php echo $apiSessionKey ?>]" class="pgImg" target="_blank"><img src="<?php echo $previewImage ?>" hight="100" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" <?php echo $class ?> /></a>
+                        <a href="<?php echo $previewImage ?>" rel="fancybox[<?php echo $apiSessionKey ?>]" class="pgImg" target="_blank"><img src="<?php echo $previewImage ?>" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" <?php echo $class ?> /></a>
                 <?php endforeach; ?>			
             </div>
             
