@@ -297,7 +297,7 @@ class PrintScience_Personalization_Model_Observer
                 ->addItem('js_css', 'printscience_personalization/jquery/fancybox/jquery.fancybox.css')
                 ->addJs('printscience_personalization/gallery.js')
                 ->addItem('js_css', 'printscience_personalization/gallery.css');
-                die('XXXXXX');
+              
          }
                 /*->addJs('printscience_personalization/jquery/jquery-1.4.2.min.js')
                 ->addJs('printscience_personalization/jquery/jquery.cycle/jquery.cycle.lite.min.js')
