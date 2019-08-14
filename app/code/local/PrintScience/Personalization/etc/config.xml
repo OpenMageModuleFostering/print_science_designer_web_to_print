@@ -2,7 +2,7 @@
 <config>    
     <modules>
         <PrintScience_Personalization>
-            <version>1.0.17</version>
+            <version>1.0.18</version>
         </PrintScience_Personalization>
     </modules>
     <frontend>
@@ -153,15 +153,7 @@
                         <method>checkCartItems</method>
                     </printscience_personalization_model_observer>
                 </observers>
-            </sales_quote_load_after>
-			<controller_action_layout_load_before>
-                <observers>
-                    <attributesethandle>
-                        <class>printscience_personalization/observer</class>
-                        <method>addAttributeSetHandle</method>
-                    </attributesethandle>
-                </observers>
-            </controller_action_layout_load_before>        
+            </sales_quote_load_after>            
         </events>
         <resources>
             <printscience_personalization_setup>

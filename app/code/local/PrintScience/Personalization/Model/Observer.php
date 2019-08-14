@@ -322,28 +322,4 @@ class PrintScience_Personalization_Model_Observer
 		$datasHelper->_redirectToUrl($checkOutUrl, "1");
 		exit;
 	}
-	
-	/**
-     * Converts attribute set name of current product to nice name ([a-z0-9_]+).
-     * Adds layout handle PRODUCT_ATTRIBUTE_SET_<attribute_set_nicename> after
-     * PRODUCT_TYPE_<product_type_id> handle
-     *
-     * Event: controller_action_layout_load_before
-     *
-     * @param Varien_Event_Observer $observer
-     */
-    public function addAttributeSetHandle(Varien_Event_Observer $observer)
-    {
-		$product = Mage::registry('current_product');
-		$datasHelper = Mage::helper('printscience_personalization/output');
-		
-        if (!($product instanceof Mage_Catalog_Model_Product)) {
-            return;
-        }
- 
-		if($datasHelper->isPersonalizationEnabled($product)) {
-			Mage::app()->getLayout()->getUpdate()->addHandle('catalog_product_view_personalization_handle');
-			Mage::app()->getLayout()->getUpdate()->addHandle('catalog_product_addtocart_personalization_handle');
-		}
-    }
 }

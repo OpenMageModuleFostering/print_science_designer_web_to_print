@@ -1,20 +1,16 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-	<catalog_product_view_personalization_handle>
-		<reference name="product.info">
-			<action method="setTemplate"><template>printscience_personalization/catalog/product/view.phtml</template></action>
-		</reference>
-	</catalog_product_view_personalization_handle>
-	<catalog_product_addtocart_personalization_handle>
-		<reference name="product.info.addtocart">
-			<action method="setTemplate"><template>printscience_personalization/catalog/product/view/addtocart.phtml</template></action>
-		</reference>
-	</catalog_product_addtocart_personalization_handle>
-    <catalog_product_view>		
+    <catalog_product_view>
 		<reference name="head">
 			<action method="addItem"><type>skin_css</type><name>printscience_personalization/modalPopLite.css</name></action>
 			<action method="addItem"><type>skin_js</type><name>printscience_personalization/jquery-1.7.2.min.js</name></action>
 			<action method="addItem"><type>skin_js</type><name>printscience_personalization/modalPopLite.min.js</name></action>
+        </reference>
+		<reference name="product.info">
+			<action method="setTemplate"><template>printscience_personalization/catalog/product/view.phtml</template></action>
+		</reference>
+        <reference name="product.info.addtocart">
+            <action method="setTemplate"><template>printscience_personalization/catalog/product/view/addtocart.phtml</template></action>
         </reference>
     </catalog_product_view>
     <checkout_cart_index>

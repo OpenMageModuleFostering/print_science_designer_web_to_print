@@ -9,6 +9,6 @@ if (!$installer->getConnection()->fetchOne("SELECT * FROM information_schema.COL
 }
 
 $installer->startSetup();
-$installer->updateAttribute('catalog_product', 'personalization_template_id', 'apply_to', implode(',',array('simple','configurable')));
-$installer->updateAttribute('catalog_product', 'personalization_enabled', 'apply_to', implode(',',array('simple','configurable')));
+$installer->updateAttribute('catalog_product', 'personalization_template_id', 'apply_to', implode(',',array('simple','bundle','configurable')));
+$installer->updateAttribute('catalog_product', 'personalization_enabled', 'apply_to', implode(',',array('simple','bundle','configurable')));
 $installer->endSetup();
