@@ -53,4 +53,14 @@
             <action method="setTemplate"><template>printscience_personalization/catalog/product/view/media.phtml</template></action>
         </reference>        
     </checkout_cart_configure>
+	<catalogsearch_result_index>
+		<reference name="head">
+			<action method="addItem"><type>skin_css</type><name>printscience_personalization/modalPopLite.css</name></action>
+			<action method="addItem"><type>skin_js</type><name>printscience_personalization/jquery-1.7.2.min.js</name></action>
+			<action method="addItem"><type>skin_js</type><name>printscience_personalization/modalPopLite.min.js</name></action>
+        </reference>
+		<reference name="search_result_list">
+			<action method="setTemplate"><template>printscience_personalization/catalog/product/list.phtml</template></action>
+		</reference>
+	</catalogsearch_result_index>
 </layout>
