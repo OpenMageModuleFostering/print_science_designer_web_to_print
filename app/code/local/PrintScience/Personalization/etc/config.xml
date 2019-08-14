@@ -2,7 +2,7 @@
 <config>    
     <modules>
         <PrintScience_Personalization>
-            <version>1.1.5</version>
+            <version>1.1.6</version>
         </PrintScience_Personalization>
     </modules>
     <frontend>
@@ -178,15 +178,16 @@
         </resources>
     </global>
 	<admin>
-		<routers>
-			<personalization>
-				<use>admin</use>
-				<args>
-					<module>Printscience_Personalization</module>
-				</args>
-			</personalization>
-		</routers>
-	</admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <PrintScience_Personalization after="Mage_Adminhtml">PrintScience_Personalization_Adminhtml</PrintScience_Personalization>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
     <default>
         <catalog>
             <personalization>

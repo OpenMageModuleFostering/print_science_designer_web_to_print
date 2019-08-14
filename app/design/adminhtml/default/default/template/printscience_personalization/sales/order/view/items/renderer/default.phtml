@@ -7,10 +7,12 @@
         <?php endif; ?>
         <div class="item-text">
             <?php echo $this->getColumnHtml($_item, 'name') ?>
-            <?php $personalizationPdfUrls = $this->getPersonalizationPreviewPdfUrl() ?>
-            <?php foreach ($personalizationPdfUrls as $key => $personalizationPdfUrl){ ?>
-				<a href="<?php echo $personalizationPdfUrl; ?>" target="_blank"><?php echo $this->__('PDF file'); ?></a>
-            <?php } ?>
+            <?php $personalizationPdfUrls = $this->getPersonalizationPreviewPdfUrl(); ?>
+			<?php if(isset($personalizationPdfUrls) && count($personalizationPdfUrls)>0) { ?>
+				<?php foreach ($personalizationPdfUrls as $key => $personalizationPdfUrl){ ?>
+					<a href="<?php echo $personalizationPdfUrl; ?>" target="_blank"><?php echo $this->__('PDF file'); ?></a>
+				<?php } ?>
+			<?php } ?>
         </div>
         <?php if ($this->canDisplayContainer()): ?>
         </div>

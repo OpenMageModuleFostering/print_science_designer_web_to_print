@@ -26,7 +26,7 @@ class Printscience_Personalization_Block_Adminhtml_Test extends Mage_Adminhtml_B
     	$buttonBlock = $this->getElement()->getForm()->getParent()->getLayout()->createBlock('adminhtml/widget_button');
     	
 		//$url = Mage::helper("adminhtml")->getUrl("printscience_personalization/test/index");
-		$url = Mage::helper('adminhtml')->getUrl('personalization/adminhtml_test/index');
+		$url = Mage::helper('adminhtml')->getUrl('adminhtml/personalizationtest/index');
     	$buttonHtml = $this->getLayout()->createBlock('adminhtml/widget_button')
                     ->setType('button')
                     ->setLabel($this->__($title))
