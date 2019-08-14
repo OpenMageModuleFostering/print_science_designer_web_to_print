@@ -278,13 +278,33 @@ class PrintScience_Personalization_Model_Observer
             }
         }
         //if ($containsPersonalizedItems) {
+        $storeId = Mage::app()->getStore()->getStoreId();
+          if(Mage::getStoreConfig('catalog/personalization/jquery_enabled',$storeId))
+          {
             $layout->getBlock('head')
-                ->addJs('printscience_personalization/jquery/jquery-1.4.2.min.js')
+             ->addJs('printscience_personalization/jquery/jquery-1.10.1.min.js')
+                ->addJs('printscience_personalization/jquery/jquery.cycle/jquery.cycle.lite.js')
+                ->addJs('printscience_personalization/jquery/fancybox/jquery.fancybox.pack.js')
+                ->addItem('js_css', 'printscience_personalization/jquery/fancybox/jquery.fancybox.css')
+                ->addJs('printscience_personalization/gallery.js')
+                ->addItem('js_css', 'printscience_personalization/gallery.css');
+         }
+         else
+         {
+         	 $layout->getBlock('head')
+                ->addJs('printscience_personalization/jquery/jquery.cycle/jquery.cycle.lite.js')
+                ->addJs('printscience_personalization/jquery/fancybox/jquery.fancybox.pack.js')
+                ->addItem('js_css', 'printscience_personalization/jquery/fancybox/jquery.fancybox.css')
+                ->addJs('printscience_personalization/gallery.js')
+                ->addItem('js_css', 'printscience_personalization/gallery.css');
+                die('XXXXXX');
+         }
+                /*->addJs('printscience_personalization/jquery/jquery-1.4.2.min.js')
                 ->addJs('printscience_personalization/jquery/jquery.cycle/jquery.cycle.lite.min.js')
                 ->addJs('printscience_personalization/jquery/fancybox/jquery.fancybox-1.3.4.pack.js')
                 ->addItem('js_css', 'printscience_personalization/jquery/fancybox/jquery.fancybox-1.3.4.css')
                 ->addJs('printscience_personalization/gallery.js')
-                ->addItem('js_css', 'printscience_personalization/gallery.css');
+                ->addItem('js_css', 'printscience_personalization/gallery.css');*/
         //}
     }
     

@@ -132,4 +132,8 @@
 	 background-position:center center;
 }
 /* end popup */
-
+/* override button rwd */
+.products-grid .actions {
+position: relative !important;
+}
+/* end override */

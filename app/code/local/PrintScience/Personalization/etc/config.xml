@@ -181,6 +181,7 @@
         <catalog>
             <personalization>
                 <api_version>1.0.0</api_version>
+                <jquery_enabled>1</jquery_enabled>
             </personalization>
         </catalog>
     </default>
