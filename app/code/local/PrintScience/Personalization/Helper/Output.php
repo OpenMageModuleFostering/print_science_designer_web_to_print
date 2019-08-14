@@ -26,4 +26,9 @@ class PrintScience_Personalization_Helper_Output extends Mage_Core_Helper_Abstra
             return true;
         }
     }
+	
+	public function getFrontendParams() {
+		$addedtoCart = (int) $_REQUEST['added'];
+		return $addedtoCart;
+	}
 }

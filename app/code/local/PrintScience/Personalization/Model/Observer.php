@@ -46,6 +46,7 @@ class PrintScience_Personalization_Model_Observer
         $request    = Mage::app()->getRequest();
         $response   = Mage::app()->getResponse();
         $session    = Mage::getSingleton('core/session');
+		$datasHelper = Mage::helper('printscience_personalization/data');
         
         $productId = intval($request->getParam('product'));
         $product   = Mage::getModel('catalog/product')
@@ -84,6 +85,7 @@ class PrintScience_Personalization_Model_Observer
         if (!$templateId) {
             $session->addError($controller->__('Unable to start personalization: template ID is empty.'));    
             $response->setRedirect($errorUrl)->sendHeaders();
+			//$datasHelper->_redirectToUrl($errorUrl);
     		exit();	      
         }
         
@@ -109,11 +111,13 @@ class PrintScience_Personalization_Model_Observer
         if (!$apiResponse) {
             $session->addError($controller->__('Unable to start personalization: API response was empty.'));    
             $response->setRedirect($errorUrl)->sendHeaders();
+			//$datasHelper->_redirectToUrl($errorUrl);
             exit();
         }
         if ($apiResponse->getFaultCode()) {
             $session->addError($controller->__('Unable to start personalization: ' . $apiResponse->getFaultString()));
             $response->setRedirect($errorUrl)->sendHeaders();
+			//$datasHelper->_redirectToUrl($errorUrl);
             exit();
         }       
         $apiSessionKey = $apiResponse->getSessionKey();
@@ -124,8 +128,10 @@ class PrintScience_Personalization_Model_Observer
             'appUrl' => $appUrl,
             'buyRequest' => serialize($buyRequestParams)
         ));
-
+		
         $response->setRedirect($appUrl)->sendHeaders();
+		
+		//$datasHelper->_redirectToUrl($appUrl);
         exit();
     }
     
@@ -302,4 +308,13 @@ class PrintScience_Personalization_Model_Observer
             }
         }        
     }
+	public function addToCartComplete(Varien_Event_Observer $observer) {
+		// Send the user to the Item added page
+		$response = $observer->getResponse();
+		$request = $observer->getRequest();
+		$datasHelper = Mage::helper('printscience_personalization/data');
+		$checkOutUrl = Mage::getUrl('checkout/cart');
+		$datasHelper->_redirectToUrl($checkOutUrl, "1");
+		exit;
+	}
 }

@@ -17,7 +17,7 @@ class PrintScience_Personalization_Block_Checkout_Cart_Item_Renderer extends Mag
         if (!$data) {
             return false;
         }
-        return $data['apiSessionKey'];        
+        return $data['apiSessionKey'];
     }
     
     /**

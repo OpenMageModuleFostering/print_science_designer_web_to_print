@@ -2,7 +2,7 @@
 <config>    
     <modules>
         <PrintScience_Personalization>
-            <version>1.0.11</version>
+            <version>1.0.12</version>
         </PrintScience_Personalization>
     </modules>
     <frontend>
@@ -31,6 +31,17 @@
                 </PrintScience_Personalization>
             </modules>
         </translate>
+		<events>
+			<checkout_cart_add_product_complete>
+				<observers>
+					<printscience_personalization_observer>
+						<type>singleton</type>
+						<class>printscience_personalization/observer</class>
+						<method>addToCartComplete</method>
+					</printscience_personalization_observer>
+				</observers>
+			</checkout_cart_add_product_complete>
+		</events>
     </frontend>
     <adminhtml>
         <layout>
@@ -38,6 +49,9 @@
                 <printscience_personalization>
                     <file>printscience_personalization.xml</file>
                 </printscience_personalization>
+				<basket>
+					<file>picker.xml</file>
+				</basket>
             </updates>
         </layout>
 		<translate>

@@ -54,6 +54,43 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </api_image_url>
+						<window_type transalte="label">
+                            <label>Window type for Design Online applications</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <source_model>printscience_personalization/system_config_source_windowType</source_model>
+                        </window_type>
+						<background_color transalte="label">
+                            <label>Background color of Margin surround the modal window</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>7</sort_order>
+							<validate>color</validate>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+							<comment>Specify the background color.</comment>                             
+                        </background_color>
+						<margin_width transalte="label">
+                            <label>Width of Margin surround the modal window</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+							<comment>(px)</comment>                             
+                        </margin_width>
+						<window_opacity transalte="label">
+                            <label>Modal window opacity</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+							<comment>Specify the modal window opacity.</comment>                             
+                        </window_opacity>
                     </fields>             
                 </personalization>
             </groups>
