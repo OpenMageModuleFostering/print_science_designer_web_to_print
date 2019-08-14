@@ -99,12 +99,12 @@ class PrintScience_Personalization_Model_ApiGateway
     {
         $client = new xmlrpc_client(Mage::getStoreConfig('catalog/personalization/api_url'));
 
-        $function = new xmlrpcmsg('getPreview', array(
+        $function = new xmlrpcmsg('getPreviewMulti', array(
         php_xmlrpc_encode($sessionKey)
         ));
 
         $response = $client->send($function);
-
+		
         return new PrintScience_Personalization_Model_ApiGateway_Response_GetPreview($response);
     }
 

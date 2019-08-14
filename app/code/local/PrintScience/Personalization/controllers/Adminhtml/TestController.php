@@ -4,7 +4,7 @@ require_once 'xmlrpc/xmlrpc.inc';
  * Test the connection
  *
  */
-class PrintScience_Personalization_TestController extends Mage_Adminhtml_Controller_Action
+class PrintScience_Personalization_Adminhtml_TestController extends Mage_Adminhtml_Controller_Action
 {
 
     public function indexAction()

@@ -260,7 +260,6 @@ class PrintScience_Personalization_Model_Observer
             if ((!$apiResponse) || ($apiResponse->getFaultCode())) {
 				continue;
             }
-                        
             $orderHelper->addItemData($orderItem, array(
                 'preview_pdf_url' => $apiResponse->getPdfUrl(),
 				'product_images' =>$apiResponse->getPeviewUrls()

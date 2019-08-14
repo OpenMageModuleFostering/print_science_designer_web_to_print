@@ -12,6 +12,7 @@ $dummyuserVersion = $_personalizationsessionHelper->getData('dummy_user_version'
         <?php $apiSessionKey = $this->getPersonalizationApiSessionKey() ?>
         <?php if ($apiSessionKey):?>
 			<?php $personalizationPreviews = $this->getPersonalizationPreviews() ?>
+            <?php //echo "<pre>"; print_r($personalizationPreviews); echo "</pre>";?>
             <div class="personalizationGallery">
                 <?php $class = 'class="first"'; ?>
                 <?php foreach ($personalizationPreviews as $previewImage):
