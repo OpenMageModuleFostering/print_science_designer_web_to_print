@@ -20,6 +20,9 @@ class PrintScience_Personalization_Model_ApiGateway
     {
         $apiUrl = Mage::getStoreConfig('catalog/personalization/api_url');
         $apiVersion = Mage::getStoreConfig('catalog/personalization/api_version');
+		$magelocale = Mage::app()->getLocale()->getLocaleCode();
+		$localeParts = explode('_',$magelocale);
+		$locale=$localeParts[0];
         $client = new xmlrpc_client($apiUrl);
         $function = null;
         // check api version
@@ -51,14 +54,15 @@ class PrintScience_Personalization_Model_ApiGateway
                 ));
                 break;
             case '4.0.0':
-                $function = new xmlrpcmsg('beginPersonalization', array(
+               $function = new xmlrpcmsg('beginPersonalization', array(
                     php_xmlrpc_encode(Mage::getStoreConfig('catalog/personalization/api_username')),
                     php_xmlrpc_encode(Mage::getStoreConfig('catalog/personalization/api_password')),
                     php_xmlrpc_encode($templateId),
                     php_xmlrpc_encode($successUrl),
                     php_xmlrpc_encode($failUrl),
                     php_xmlrpc_encode($cancelUrl),
-                    php_xmlrpc_encode('')
+                    php_xmlrpc_encode(''),
+					php_xmlrpc_encode($locale)
                 ));
                 break;
             default:
