@@ -33,24 +33,13 @@ extends PrintScience_Personalization_Model_ApiGateway_Response_Abstract
      */
     public function getPeviewUrls()
     {
-        $previewUrls = array();
-        $apiVersion = Mage::getStoreConfig('catalog/personalization/api_version');
         $previewUrlMember = $this->response->value()->structMem('preview_url');
-        // check api version
-        switch($apiVersion)
-        {
-            case '4.0.0':
-                for ($i = 0; $i < $previewUrlMember->arraySize(); $i++) {
-                    $temp = $previewUrlMember->arrayMem($i)->scalarval();
-                    $previewUrls[] = $temp[1]->scalarval();
-                }
-                break;
-            default:
-                for ($i = 0; $i < $previewUrlMember->arraySize(); $i++) {
-                    $previewUrls[] = $previewUrlMember->arrayMem($i)->scalarval();
-                }
-                break;
+
+        $previewUrls = array();
+        for ($i = 0; $i < $previewUrlMember->arraySize(); $i++) {
+            $previewUrls[] = $previewUrlMember->arrayMem($i)->scalarval();
         }
+
         return $previewUrls;
     }
 }

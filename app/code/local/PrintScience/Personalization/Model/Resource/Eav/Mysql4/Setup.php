@@ -79,7 +79,7 @@ class PrintScience_Personalization_Model_Resource_Eav_Mysql4_Setup extends Mage_
                         'type'              => 'varchar',
                         'backend'           => '',
                         'frontend'          => '',
-                        'label'             => 'Product ID',
+                        'label'             => 'Template ID',
                         'input'             => 'text',
                         'class'             => '',
                         'source'            => '',
