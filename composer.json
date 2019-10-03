@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/Print_Science_Designer_Web_to_Print",
+    "name": "OpenMageModuleFostering\/Print_Science_Designer_Web_to_Print",
     "type": "magento-module",
     "license": "OSL-v3.0",
     "homepage": "",
     "description": "Print_Science_Designer_Web_to_Print",
     "authors": [
-    {
-        "name": "John Weissberg",
-        "email": "jw@print-science.com"
-    }
-],
+        {
+            "name": "John Weissberg",
+            "email": "jw@print-science.com"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
